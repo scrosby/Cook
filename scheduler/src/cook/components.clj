@@ -27,6 +27,7 @@
             [cook.impersonation :refer (impersonation-authorized-wrapper)]
             [cook.util :as util]
             [metrics.jvm.core :as metrics-jvm]
+            [metrics.reporters.jmx :as jmx]
             [metrics.ring.instrument :refer (instrument)]
             [mount.core :as mount]
             [plumbing.core :refer (fnk)]
@@ -285,6 +286,7 @@
   (try
     (mount/start-with-args (cook.config/read-config config-file-path))
     (metrics-jvm/instrument-jvm)
+      (jmx/start (jmx/reporter metrics.core/default-registry {}))
     (let [server (scheduler-server config)]
       (intern 'user 'main-graph server)
       (log/info "Started Cook, stored variable in user/main-graph"))
