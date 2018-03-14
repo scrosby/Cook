@@ -640,7 +640,8 @@
                                   (mapv (fn make-group-constraints [group]
                                           (constraints/make-fenzo-group-constraint
                                            db group #(guuid->considerable-cotask-ids (:group/uuid group)) running-cotask-cache))
-                                        (:group/_job job)))))
+                                        (:group/_job job))))
+                        (doall))
         needs-gpus? (constraints/job-needs-gpus? job)
         scalar-requests (reduce (fn [result resource]
                                   (if-let [value (:resource/amount resource)]
