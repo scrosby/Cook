@@ -812,7 +812,7 @@
                               (let [existing-jobs (category->pending-jobs category)
                                     matched-job-uuids (category->matched-job-uuids category)]
                                 (remove #(contains? matched-job-uuids (:job/uuid %)) existing-jobs)))]
-    (pc/map-from-keys remove-matched-jobs (keys category->pending-jobs))))
+    (doall (pc/map-from-keys remove-matched-jobs (keys category->pending-jobs)))))
 
 (defn- update-match-with-task-metadata-seq
   "Updates the match with an entry for the task metadata for all tasks."
@@ -1445,7 +1445,7 @@
         (log/debug "Total number of pending jobs is:" (apply + (map count (vals jobs)))
                    "The first 20 pending normal jobs:" (take 20 (:normal jobs))
                    "The first 5 pending gpu jobs:" (take 5 (:gpu jobs)))
-        jobs)
+        (doall jobs))
       (catch Throwable t
         (log/error t "Failed to rank jobs")
         (meters/mark! rank-jobs-failures)
