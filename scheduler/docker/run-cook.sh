@@ -8,4 +8,7 @@ echo "Seeding test data..."
 lein exec -p /opt/cook/datomic/data/seed_pools.clj ${COOK_DATOMIC_URI}
 lein exec -p /opt/cook/datomic/data/seed_k8s_pools.clj ${COOK_DATOMIC_URI}
 lein exec -p /opt/cook/datomic/data/seed_running_jobs.clj ${COOK_DATOMIC_URI}
+while true;
+do
 lein with-profiles +docker run $1
+done
