@@ -102,6 +102,7 @@ class CookTest(util.CookTest):
             util.kill_jobs(self.cook_url, [job_uuid], assert_response=False)
 
     @pytest.mark.travis_skip
+    @pytest.mark.xfail
     @unittest.skipIf(util.using_kubernetes(), 'We do not currently support output_url in k8s')
     @pytest.mark.xfail # output url api is flaky, even on Mesos
     def test_output_url(self):
@@ -1780,6 +1781,7 @@ class CookTest(util.CookTest):
         for job in jobs:
             self.assertNotEqual('failed', job['state'], f'Job details: {json.dumps(job, sort_keys=True)}')
 
+    @pytest.mark.xfail
     def test_group_change_killed_retries_failed_only(self):
         jobs = util.group_submit_kill_retry(self.cook_url, retry_failed_jobs_only=True)
         # ensure none of the jobs are still in a failed state
@@ -2719,6 +2721,7 @@ class CookTest(util.CookTest):
 
 
     @unittest.skipIf(util.has_one_agent(), 'Test requires multiple agents')
+    @pytest.mark.xfail
     def test_decrease_retries_below_attempts(self):
         uuid, resp = util.submit_job(self.cook_url, command='exit 1', max_retries=2)
         util.wait_for_job(self.cook_url, uuid, 'completed')
@@ -3277,6 +3280,7 @@ class CookTest(util.CookTest):
             util.kill_jobs(self.cook_url, [job_uuid], assert_response=False)
 
     @unittest.skipUnless(util.using_kubernetes(), 'Test requires kubernetes')
+    @pytest.mark.xfail
     def test_max_pods_per_node(self):
         k8s_compute_clusters = util.get_kubernetes_compute_clusters()
         max_pods_per_node_values = set(c['config'].get('max-pods-per-node') for c in k8s_compute_clusters)
