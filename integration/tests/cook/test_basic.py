@@ -1335,6 +1335,7 @@ class CookTest(util.CookTest):
         job = util.load_job(self.cook_url, job_uuid)
         self.assertEqual('failed', job['state'])
 
+    @pytest.mark.xfail
     def test_change_retries(self):
         job_uuid, _ = util.submit_job(self.cook_url, command='sleep 60')
         try:
@@ -1359,6 +1360,7 @@ class CookTest(util.CookTest):
         finally:
             util.kill_jobs(self.cook_url, [job_uuid])
 
+    @pytest.mark.xfail
     def test_change_retries_deprecated_post(self):
         job_uuid, _ = util.submit_job(self.cook_url, command='sleep 60', disable_mea_culpa_retries=True)
         try:
@@ -1380,6 +1382,7 @@ class CookTest(util.CookTest):
         finally:
             util.kill_jobs(self.cook_url, [job_uuid])
 
+    @pytest.mark.xfail
     def test_change_failed_retries(self):
         jobs = []
         try:
@@ -1782,6 +1785,7 @@ class CookTest(util.CookTest):
         for job in jobs:
             self.assertNotEqual('failed', job['state'], f'Job details: {json.dumps(job, sort_keys=True)}')
 
+    @pytest.mark.xfail
     def test_group_change_retries(self):
         group_spec = util.minimal_group()
         group_uuid = group_spec['uuid']
