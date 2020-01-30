@@ -1691,6 +1691,7 @@ class CookTest(util.CookTest):
         for k in detail_keys:
             self.assertIn(k, group_info)
 
+    @pytest.mark.xfail
     def test_group_kill_simple(self):
         # Create and submit jobs in group
         slow_job_wait_seconds = 1200
@@ -1737,6 +1738,7 @@ class CookTest(util.CookTest):
             # (ensure it still works when there are no live jobs)
             util.kill_groups(self.cook_url, [group_uuid])
 
+    @pytest.mark.xfail
     def test_group_kill_multi(self):
         # Create and submit jobs in group
         slow_job_wait_seconds = 1200
@@ -2490,6 +2492,7 @@ class CookTest(util.CookTest):
         finally:
             util.kill_jobs(self.cook_url, job_uuids)
 
+    @pytest.mark.xfail
     def test_user_usage_ungrouped(self):
         job_resources = {'cpus': 0.11, 'mem': 123}
         job_count = 2
