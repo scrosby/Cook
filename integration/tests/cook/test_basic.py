@@ -1337,6 +1337,7 @@ class CookTest(util.CookTest):
         self.assertEqual('failed', job['state'])
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_change_retries(self):
         job_uuid, _ = util.submit_job(self.cook_url, command='sleep 60')
         try:
@@ -1362,6 +1363,7 @@ class CookTest(util.CookTest):
             util.kill_jobs(self.cook_url, [job_uuid])
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_change_retries_deprecated_post(self):
         job_uuid, _ = util.submit_job(self.cook_url, command='sleep 60', disable_mea_culpa_retries=True)
         try:
@@ -1384,6 +1386,7 @@ class CookTest(util.CookTest):
             util.kill_jobs(self.cook_url, [job_uuid])
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_change_failed_retries(self):
         jobs = []
         try:
@@ -1544,6 +1547,7 @@ class CookTest(util.CookTest):
 
     @unittest.skipIf(util.has_ephemeral_hosts(), util.EPHEMERAL_HOSTS_SKIP_REASON)
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_hostname_equals_job_constraint(self):
         hostnames = util.hostnames_to_consider(self.cook_url)[:10]
 
@@ -1739,6 +1743,7 @@ class CookTest(util.CookTest):
             util.kill_groups(self.cook_url, [group_uuid])
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_group_kill_multi(self):
         # Create and submit jobs in group
         slow_job_wait_seconds = 1200
@@ -1777,6 +1782,7 @@ class CookTest(util.CookTest):
             util.kill_groups(self.cook_url, [group_uuid])
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_group_change_killed_retries(self):
         jobs = util.group_submit_kill_retry(self.cook_url, retry_failed_jobs_only=False)
         # ensure none of the jobs are still in a failed state
@@ -1784,6 +1790,7 @@ class CookTest(util.CookTest):
             self.assertNotEqual('failed', job['state'], f'Job details: {json.dumps(job, sort_keys=True)}')
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_group_change_killed_retries_failed_only(self):
         jobs = util.group_submit_kill_retry(self.cook_url, retry_failed_jobs_only=True)
         # ensure none of the jobs are still in a failed state
@@ -1791,6 +1798,7 @@ class CookTest(util.CookTest):
             self.assertNotEqual('failed', job['state'], f'Job details: {json.dumps(job, sort_keys=True)}')
 
     @pytest.mark.xfail
+    @unittest.skipIf(True, 'Test is too slow')
     def test_group_change_retries(self):
         group_spec = util.minimal_group()
         group_uuid = group_spec['uuid']
@@ -1841,6 +1849,7 @@ class CookTest(util.CookTest):
             util.kill_groups(self.cook_url, [group_uuid])
 
     @pytest.mark.xfail(reason="Test can fail if one of the 5 jobs fails, e.g. due to 'Invalid task'")
+    @unittest.skipIf(True, 'Test is too slow')
     def test_group_failed_only_change_retries_all_active(self):
         statuses = ['running', 'waiting']
         jobs = util.group_submit_retry(self.cook_url, command='sleep 120', predicate_statuses=statuses)
@@ -2897,6 +2906,7 @@ class CookTest(util.CookTest):
             self.assertEqual('Mesos task reconciliation', instances[0]['reason_string'])
 
     @unittest.skipUnless(util.using_data_local_fitness_calculator(), "Requires the data local fitness calculator")
+    @unittest.skipIf(True, 'Test is too slow')
     def test_data_local_constraint_missing_data(self):
         job_uuid, resp = util.submit_job(self.cook_url,
                                          datasets=[{'dataset': {'uuid': str(util.make_temporal_uuid())}}])
