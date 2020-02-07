@@ -564,6 +564,7 @@ class CookTest(util.CookTest):
         message = json.dumps(job['instances'], sort_keys=True)
         self.assertIn('success', [i['status'] for i in job['instances']], message)
 
+    @pytest.mark.xfail
     def test_job_environment_cook_job_and_instance_and_group_uuid(self):
         command = 'echo "Job environment:" && env && echo "Checking environment variables..." && ' \
                   'if [ ${#COOK_JOB_GROUP_UUID} -eq 0 ]; then echo "COOK_JOB_GROUP_UUID env is missing"; exit 1; ' \
@@ -1854,6 +1855,7 @@ class CookTest(util.CookTest):
             self.assertLessEqual(1, len(job['instances']), job_details)
 
     @unittest.skipIf(util.has_one_agent(), 'Test requires multiple agents')
+    @pytest.mark.xfail
     def test_group_failed_only_change_retries_all_failed(self):
         statuses = ['completed']
         jobs = util.group_submit_retry(self.cook_url, command='exit 1', predicate_statuses=statuses)
@@ -2724,6 +2726,7 @@ class CookTest(util.CookTest):
         self.assertEqual('Retries would be less than attempts-consumed',
                          resp.json()['error'])
 
+    @pytest.mark.xfail
     def test_retries_unchanged_conflict(self):
         uuid, resp = util.submit_job(self.cook_url, command='exit 0', max_retries=1, disable_mea_culpa_retries=True)
         util.wait_for_job(self.cook_url, uuid, 'completed')
@@ -2763,6 +2766,7 @@ class CookTest(util.CookTest):
         self.assertTrue(job_uuids[0] in error, resp.content)
         self.assertFalse(job_uuids[1] in error, resp.content)
 
+    @pytest.mark.xfail
     def test_set_retries_to_attempts_conflict(self):
         sleep_command = f'sleep {util.DEFAULT_TEST_TIMEOUT_SECS}'
         uuid, resp = util.submit_job(self.cook_url, command=sleep_command,
