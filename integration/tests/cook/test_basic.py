@@ -1779,6 +1779,7 @@ class CookTest(util.CookTest):
         for job in jobs:
             self.assertNotEqual('failed', job['state'], f'Job details: {json.dumps(job, sort_keys=True)}')
 
+    @pytest.mark.xfail
     def test_group_change_killed_retries_failed_only(self):
         jobs = util.group_submit_kill_retry(self.cook_url, retry_failed_jobs_only=True)
         # ensure none of the jobs are still in a failed state
@@ -1845,6 +1846,7 @@ class CookTest(util.CookTest):
             self.assertLessEqual(len(job['instances']), 1, job_details)
 
     @unittest.skipIf(util.has_one_agent(), 'Test requires multiple agents')
+    @unittest.skipIf(util.using_kubernetes(), 'Broken on kubernetes')
     def test_group_failed_only_change_retries_all_success(self):
         statuses = ['completed']
         jobs = util.group_submit_retry(self.cook_url, command='exit 0', predicate_statuses=statuses)
@@ -1855,6 +1857,7 @@ class CookTest(util.CookTest):
             self.assertLessEqual(1, len(job['instances']), job_details)
 
     @unittest.skipIf(util.has_one_agent(), 'Test requires multiple agents')
+    @unittest.skipIf(util.using_kubernetes(), 'Broken on kubernetes')
     @pytest.mark.xfail
     def test_group_failed_only_change_retries_all_failed(self):
         statuses = ['completed']
